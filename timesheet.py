@@ -10,24 +10,40 @@ import pdb
 
 locale.setlocale(locale.LC_ALL, 'sv_SE.utf8') # sv_SE in linux, 'sv' in win
 
+
+# Fixed rows for work/leavehours
+dateRow = 1
+freeRow = 2
+vabRow = 3
+illRow = 4
+holiRow = 5
+workRow = 6
+projRow = 7
+
+
 def toDecTime(hrs, mins):
     timeVal = int(hrs) + int(mins) / 60.0
     return round(timeVal, 2)
 
 def autosize_columns(worksheet):
     for col in worksheet.iter_cols(min_row=0,max_row=0,max_col=36):
-     max_length = 0
-     column = col[0].column_letter # Get the column name
-# Since Openpyxl 2.6, the column name is  ".column_letter" as .column became the column number (1-based) 
-     for cell in col:
-         try: # Necessary to avoid error on empty cells
-             if len(str(cell.value)) > max_length:
-                 max_length = len(cell.value)
-         except:
-             pass
-     adjusted_width = (max_length + 2)
-     # pdb.set_trace()
-     worksheet.column_dimensions[column].width = adjusted_width
+        max_length = 0
+        column = col[0].column_letter # Get the column name
+        # Since Openpyxl 2.6, the column name is  ".column_letter" as .column became the column number (1-based)
+        adjusted_width = 0
+        for c in col:
+            try: # Necessary to avoid error on empty cells
+                if c.row == workRow and c.col_idx > 3:  # Hide columns with zero worked hours
+                    if c.value == 0.0:
+                        worksheet.column_dimensions[column].hidden = True
+                        break
+                if len(str(c.value)) > max_length:
+                    max_length = len(c.value)
+            except:
+                pass
+        adjusted_width = (max_length + 2)
+
+        worksheet.column_dimensions[column].width = adjusted_width
 
 def getProjNrs():
     return list( json.loads(open('projs.json','r').read()).keys() )
@@ -39,15 +55,6 @@ def getProjCmts():
 
 # Column will be incremented with every new date we find in the input.
 dateCol = 3  # First columns saved for project number and sum
-
-# Fixed rows for work/leavehours
-dateRow = 1
-freeRow = 2
-vabRow = 3
-illRow = 4
-holiRow = 5
-workRow = 6
-projRow = 7
 
 book = openpyxl.Workbook()
 sheet1 = book.worksheets[0]
@@ -76,7 +83,7 @@ for row in range(0, len(projNrs)):
     projCell.value = projNrs[row]
     print('{0} : {1} '.format(projNrs[row], comment[row]))
     sumCell = sheet1.cell(row=rowNr, column=3)
-    sumCell.value = '=sum($D${0}:$AK${0}'.format(rowNr)
+    sumCell.value = '=sum($D${0}:$AK${0})'.format(rowNr)
 
 sheet1.cell(row=workRow, column=3).value = '=sum(D{0}:AK{0})-SUM(C{1}:C{2})'.format(workRow,projRow+1,projRow+len(projNrs))
 
