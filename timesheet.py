@@ -7,9 +7,9 @@ import locale
 from openpyxl.comments import Comment
 import json
 import pdb
+import sys
 
 locale.setlocale(locale.LC_ALL, 'sv_SE.utf8') # sv_SE in linux, 'sv' in win
-
 
 # Fixed rows for work/leavehours
 dateRow = 1
@@ -91,7 +91,9 @@ sheet1.auto_filter.ref = 'A' + str(projRow) + ':C' + str(projRow + len(projNrs))
 
 
 # Get all inputfiles from onedrive
-inpFiles = glob.glob('/home/ubuntu/OneDrive/Saldon*.xlsx')
+inpGlob = sys.argv[1] + 'Saldon*.xlsx'
+print('Reading saldo from \"' + inpGlob + '\"')
+inpFiles = glob.glob(inpGlob)
 
 for file in inpFiles:
     print("Reading " + file + '...')
