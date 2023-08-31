@@ -1,14 +1,14 @@
-dist=$(uname -a)
+#!/bin/bash
 inpPath=''
 startCmd=''
-
-if [[ $dist =~ 'WSL' ]]
+dist=$(uname -a)
+if [[ $dist  == *"WSL"* ]];
 then
     echo 'Running in WSL'
     inpPath='/mnt/c/Users/tmgfgn/Downloads/'
     startCmd='cmd.exe /C start'
 else
-    echo 'Running in linux'
+    echo 'Running in ubuntu'
     inpPath='/home/ubuntu/OneDrive/'
     startCmd='xdg-open'
 fi
@@ -20,4 +20,6 @@ python3 ./timesheet.py $inpPath
 datetoday=$(date -I)
 tdFileName='timesheet_'$datetoday'.xlsx'
 mv timesheet.xlsx $tdFileName
-eval $startCmd $tdFileName &
+cmdLine="${startCmd} ${tdFileName} &"
+# echo $cmdLine
+eval $cmdLine
