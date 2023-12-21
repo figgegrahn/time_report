@@ -91,8 +91,9 @@ sheet1.auto_filter.ref = 'A' + str(projRow) + ':C' + str(projRow + len(projNrs))
 
 
 # Get all inputfiles from onedrive
-inpGlob = sys.argv[1] + 'Saldon*.xlsx'
-print('Reading saldo from \"' + inpGlob + '\"')
+inpPath= str(sys.argv[1])
+inpGlob = inpPath + 'Saldon*.xlsx'
+print('Reading saldo from ' + inpGlob )
 inpFiles = glob.glob(inpGlob)
 
 for file in inpFiles:

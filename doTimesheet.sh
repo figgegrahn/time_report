@@ -5,7 +5,7 @@ dist=$(uname -a)
 if [[ $dist  == *"WSL"* ]];
 then
     echo 'Running in WSL'
-    inpPath='/mnt/c/Users/tmgfgn/Downloads/'
+    inpPath="/mnt/c/Users/figge/OneDrive - Epiroc/"
     startCmd='cmd.exe /C start'
 else
     echo 'Running in ubuntu'
@@ -13,7 +13,7 @@ else
     startCmd='xdg-open'
 fi
 echo "Creating timesheet..."
-python3 ./timesheet.py $inpPath
+python3 ./timesheet.py "$inpPath"
 
 # timesheet.py creates a 'timesheet.xlsx'
 # Rename to reflect today's date
