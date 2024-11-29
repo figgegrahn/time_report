@@ -25,3 +25,8 @@ mv timesheet.xlsx $tdFileName
 cmdLine="${startCmd} ${tdFileName} &"
 # echo $cmdLine
 eval $cmdLine
+
+read -p "Press enter when hours are filled in to copy to OneDrive"
+cp $tdFileName "$inpPath"
+"/mnt/c/Program Files/Microsoft OneDrive/OneDrive.exe" /sync
+echo "Timesheet copied to OneDrive"
