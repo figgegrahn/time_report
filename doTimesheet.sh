@@ -27,6 +27,6 @@ cmdLine="${startCmd} ${tdFileName} &"
 eval $cmdLine
 
 read -p "Press enter when hours are filled in to copy to OneDrive"
-cp $tdFileName "$inpPath"
+mv $tdFileName "$inpPath/timesheets/"
 "/mnt/c/Program Files/Microsoft OneDrive/OneDrive.exe" /sync
 echo "Timesheet copied to OneDrive"
